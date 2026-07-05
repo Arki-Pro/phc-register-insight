@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register-to-Insight | PHC Digitization</title>
+    <style>
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --accent-primary: #3b82f6;
+            --accent-success: #10b981;
+            --accent-warning: #f59e0b;
+            --accent-danger: #ef4444;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background-color: var(--bg-card);
+            border-right: 1px solid #334155;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .brand h2 {
+            font-size: 1.4rem;
+            color: var(--accent-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .brand p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .pipeline-flow {
+            margin-top: 2rem;
+        }
+
+        .pipeline-step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .pipeline-step.active {
+            color: var(--text-main);
+            font-weight: bold;
+        }
+
+        .step-dot {
+            width: 10px;
+            height: 10px;
+            background-color: #475569;
+            border-radius: 50%;
+        }
+
+        .pipeline-step.active .step-dot {
+            background-color: var(--accent-primary);
+            box-shadow: 0 0 8px var(--accent-primary);
+        }
+
+        /* Main Dashboard Content */
+        .main-content {
+            flex: 1;
+            padding: 2.5rem;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 1rem;
+        }
+
+        .badge {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent-primary);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Upload Area Components */
+        .upload-box {
+            border: 2px dashed #475569;
+            border-radius: 8px;
+            padding: 3rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upload-box:hover {
+            border-color: var(--accent-primary);
+            background: rgba(59, 130, 246, 0.02);
+        }
+
+        .upload-btn {
+            background-color: var(--accent-primary);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        /* JSON View Component */
+        pre {
+            background-color: #0f172a;
+            padding: 1rem;
+            border-radius: 6px;
+            color: #38bdf8;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            border: 1px solid #1e293b;
+            max-height: 250px;
+        }
+
+        /* Alert and Prediction Banner */
+        .alert-banner {
+            grid-column: span 2;
+            background: linear-gradient(90deg, rgba(239,68,68,0.15) 0%, rgba(30,41,59,1) 100%);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            display: none; /* Controlled by JS simulation */
+        }
+
+        .alert-info h3 {
+            color: var(--accent-danger);
+            margin-bottom: 0.3rem;
+        }
+
+        .voice-btn {
+            background-color: var(--accent-warning);
+            color: #0f172a;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s;
+        }
+
+        .voice-btn:hover {
+            transform: scale(1.03);
+        }
+
+        /* Stock Status Table Component */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.5rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #334155;
+            font-size: 0.9rem;
+        }
+
+        th {
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .status-critical {
+            color: var(--accent-danger);
+            font-weight: bold;
+        }
+
+        .status-safe {
+            color: var(--accent-success);
+        }
+
+        .footer-note {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="brand">
+            <h2>Register-to-Insight</h2>
+            <p>PHC Data Digitization + AI</p>
+            
+            <div class="pipeline-flow">
+                <div class="pipeline-step active" id="step1"><span class="step-dot"></span> 1. Image Capture</div>
+                <div class="pipeline-step" id="step2"><span class="step-dot"></span> 2. Gemini Multimodal OCR</div>
+                <div class="pipeline-step" id="step3"><span class="step-dot"></span> 3. Threshold Engine</div>
+                <div class="pipeline-step" id="step4"><span class="step-dot"></span> 4. TTS Regional Alert</div>
+            </div>
+        </div>
+        <div class="footer-note">
+            <p>July 8 MVP Sprint Build</p>
+            <p>Zero behavior change for rural staff</p>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <div>
+                <h1>Primary Health Centre Dashboard</h1>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 4px;">Real-time stock monitoring from manual paper logs</p>
+            </div>
+            <span class="badge">Live MVP Engine</span>
+        </div>
+
+        <div class="grid-layout">
+            
+            <div class="alert-banner" id="predictionAlert">
+                <div class="alert-info">
+                    <h3>⚠️ Automated Stockout Risk Detected</h3>
+                    <p id="alertText">ORS (Oral Rehydration Salts) will run out in 3 days based on current consumption velocity.</p>
+                </div>
+                <button class="voice-btn" onclick="playVoiceAlert()">
+                    🔊 Speak Alert (Hindi)
+                </button>
+            </div>
+
+            <div class="card">
+                <div class="card-title">📸 Step 1: Upload Paper Register Entry</div>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">
+                    Staff takes a snapshot of the logbook. No computer literacy needed.
+                </p>
+                <div class="upload-box" onclick="simulatePipeline()">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📄</div>
+                    <p style="font-weight: 600;">Drop paper register photo here or click to browse</p>
+                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">Supports JPG, PNG from smartphone camera</p>
+                    <button class="upload-btn">Simulate Demo Flow</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">🤖 Step 2: Gemini API Extracted JSON</div>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">
+                    Multimodal vision extracts unformatted, handwritten table cells seamlessly.
+                </p>
+                <pre id="jsonOutput">// Upload an image to view structured JSON schema payload...</pre>
+            </div>
+
+            <div class="card" style="grid-column: span 2;">
+                <div class="card-title">📊 Step 3 & 4: Inventory Thresholds & Forecast Insights</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Drug Name</th>
+                            <th>Current Inventory</th>
+                            <th>Daily Burn Rate (Avg)</th>
+                            <th>Days Remaining Forecast</th>
+                            <th>System Status Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Paracetamol 500mg</td>
+                            <td>1,200 units</td>
+                            <td>45 units/day</td>
+                            <td>26 Days</td>
+                            <td class="status-safe">✅ Optimal Stock</td>
+                        </tr>
+                        <tr id="orsRow">
+                            <td>ORS Packets</td>
+                            <td>42 units</td>
+                            <td>14 units/day</td>
+                            <td class="status-critical" id="orsDays">3 Days</td>
+                            <td class="status-critical" id="orsStatus">⚠️ High Alert Triggered</td>
+                        </tr>
+                        <tr>
+                            <td>Amoxicillin 250mg</td>
+                            <td>850 units</td>
+                            <td>20 units/day</td>
+                            <td>42 Days</td>
+                            <td class="status-safe">✅ Optimal Stock</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function simulatePipeline() {
+            // Step updates
+            document.getElementById('step2').classList.add('active');
+            
+            // Mocking Gemini Response
+            const mockGeminiJSON = {
+                "phc_metadata": {
+                    "extracted_timestamp": "2026-07-05T20:15:00Z",
+                    "confidence_score": 0.94
+                },
+                "logbook_data": [
+                    { "item": "Paracetamol 500mg", "current_balance": 1200, "logged_date": "05-07-2026" },
+                    { "item": "ORS Packets", "current_balance": 42, "logged_date": "05-07-2026" },
+                    { "item": "Amoxicillin 250mg", "current_balance": 850, "logged_date": "05-07-2026" }
+                ]
+            };
+
+            document.getElementById('jsonOutput').textContent = JSON.stringify(mockGeminiJSON, null, 4);
+            
+            // Trigger ML alert modules
+            setTimeout(() => {
+                document.getElementById('step3').classList.add('active');
+                document.getElementById('predictionAlert').style.display = 'flex';
+                document.getElementById('step4').classList.add('active');
+            }, 800);
+        }
+
+        function playVoiceAlert() {
+            // Using Web Speech API to simulate the Cloud TTS Hindi Voice Output for presentation
+            const alertMsg = new SpeechSynthesisUtterance();
+            alertMsg.text = "सावधान। ओ आर एस स्टॉक तीन दिनों में समाप्त हो जाएगा। कृपया रीऑर्डर करें।";
+            alertMsg.lang = 'hi-IN';
+            alertMsg.rate = 0.9; 
+            window.speechSynthesis.speak(alertMsg);
+        }
+    </script>
+</body>
+</html>
