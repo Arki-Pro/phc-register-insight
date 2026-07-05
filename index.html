@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Track 3: Smart Health Governance Engine | Code for Communities</title>
+    <title>Track 3: Smart Health Governance Engine</title>
     <style>
         :root {
             --bg-main: #0b0f19;
             --bg-card: #131c2e;
-            --bg-tech: #1e293b;
             --accent-blue: #38bdf8;
             --accent-green: #34d399;
             --accent-warning: #fbbf24;
@@ -21,146 +20,114 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
-        /* FIXED: Viewport height clamped to force child container scrolling */
+        /* Standard Native Scroll Setup - No layout locking */
         body {
             background-color: var(--bg-main);
             color: var(--text-light);
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
+            padding: 2rem 1rem;
+            line-height: 1.5;
         }
 
-        /* Lateral Navigation Pipeline Map */
-        .sidebar {
-            width: 320px;
-            background-color: var(--bg-card);
-            border-right: 1px solid #1e293b;
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100%;
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
         }
 
-        .track-badge {
+        header {
+            border-bottom: 1px solid #1e293b;
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .badge {
             background: rgba(56, 189, 248, 0.1);
             color: var(--accent-blue);
-            padding: 0.3rem 0.6rem;
+            padding: 0.4rem 0.8rem;
             border-radius: 4px;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             font-weight: bold;
-            text-transform: uppercase;
             display: inline-block;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
         }
 
-        .pipeline-map {
-            margin-top: 1.5rem;
-        }
-
-        .node {
-            padding: 0.75rem;
-            border-left: 2px solid #334155;
-            margin-bottom: 1rem;
-            font-size: 0.85rem;
-            color: var(--text-dim);
-            transition: all 0.3s ease;
-        }
-
-        .node.completed {
-            border-left-color: var(--accent-blue);
-            color: var(--text-light);
-        }
-
-        /* FIXED: Standalone scrolling workspace view enabled */
-        .workspace {
-            flex: 1;
-            padding: 2rem;
-            overflow-y: auto;
-            height: 100%;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-            padding-bottom: 3rem;
-        }
-
-        .card {
+        /* Block Sections */
+        .section-card {
             background-color: var(--bg-card);
             border: 1px solid #1e293b;
             border-radius: 8px;
             padding: 1.5rem;
+            margin-bottom: 1.5rem;
         }
 
-        /* Dev Operational Banner */
-        .dev-explainer-box {
-            grid-column: span 2;
+        .explainer-box {
             background-color: #0f172a;
-            border: 1px dashed var(--accent-blue);
-            border-radius: 8px;
+            border-left: 4px solid var(--accent-blue);
             padding: 1rem;
-            font-size: 0.85rem;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
         }
 
-        /* System Critical Alert Modules */
-        .action-banner {
-            grid-column: span 2;
+        .alert-banner {
             background: linear-gradient(90deg, rgba(248,113,113,0.15) 0%, rgba(19,28,46,1) 100%);
-            border: 1px solid rgba(248, 113, 113, 0.3);
+            border: 1px solid rgba(248, 113, 113, 0.4);
             border-radius: 8px;
             padding: 1.2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            display: none;
-            animation: fadeIn 0.4s ease-in-out;
+            margin-bottom: 1.5rem;
+            display: none; /* Triggered via JS */
         }
 
-        .speak-btn {
-            background-color: var(--accent-warning);
-            color: #000;
+        /* Interactive Elements */
+        .action-btn {
+            background-color: var(--accent-blue);
+            color: #0b0f19;
             border: none;
-            padding: 0.6rem 1.2rem;
-            border-radius: 4px;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.2s;
+            font-size: 0.95rem;
+            transition: background 0.2s;
         }
 
-        .speak-btn:hover {
-            transform: scale(1.02);
+        .action-btn:hover {
+            background-color: #7dd3fc;
         }
 
-        /* Functional Elements */
-        .upload-zone {
-            border: 2px dashed #334155;
-            border-radius: 6px;
-            padding: 2.5rem 1rem;
-            text-align: center;
+        .voice-btn {
+            background-color: var(--accent-warning);
+            color: #000;
+        }
+
+        select {
+            background: var(--bg-main);
+            color: var(--text-light);
+            border: 1px solid #334155;
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 600;
             cursor: pointer;
-            margin-top: 1rem;
-            transition: border-color 0.2s;
+            margin-top: 0.5rem;
+            width: 100%;
+            max-width: 350px;
         }
 
-        .upload-zone:hover {
-            border-color: var(--accent-blue);
-        }
-        
         pre {
             background-color: #0b0f19;
             padding: 1rem;
             border-radius: 6px;
             color: #a7f3d0;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.8rem;
+            font-family: monospace;
+            font-size: 0.85rem;
             overflow-x: auto;
-            max-height: 220px;
+            margin-top: 1rem;
             border: 1px solid #1e293b;
         }
 
@@ -168,255 +135,194 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 1rem;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
         }
 
         th, td {
-            padding: 0.75rem 0.6rem;
+            padding: 0.75rem;
             text-align: left;
             border-bottom: 1px solid #1e293b;
         }
 
         th {
             color: var(--text-dim);
-            font-weight: 600;
         }
 
-        .alert-text {
+        .text-danger {
             color: var(--accent-red);
             font-weight: bold;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-5px); }
-            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
-    <!-- SIDEBAR: Structural Alignment Mapping -->
-    <div class="sidebar">
-        <div>
-            <span class="track-badge">🏥 Track 3 — Smart Health</span>
-            <h2 style="font-size: 1.25rem; letter-spacing: -0.5px;">Register-to-Insight</h2>
-            <p style="font-size: 0.8rem; color: var(--text-dim); margin-top: 4px;">Zero-Behavior Governance Pipeline</p>
+    <div class="container">
+        
+        <header>
+            <span class="badge">🏥 Problem Track 3: Smart Health</span>
+            <h1 style="font-size: 2rem; margin-bottom: 4px;">Register-to-Insight Engine</h1>
+            <p style="color: var(--text-dim); font-size: 0.95rem;">Empowering Rural PHCs via Zero-Behavior-Change Data Capture</p>
             
-            <div class="pipeline-map">
-                <div class="node completed" id="n1"><b>[Capture]</b> Manual Paper Log Snapshot</div>
-                <div class="node" id="n2"><b>[AI Extraction]</b> Gemini Multimodal Handwriting Parsing</div>
-                <div class="node" id="n3"><b>[ML Engine]</b> Velocity & Burn-Rate Analytics</div>
-                <div class="node" id="n4"><b>[Inclusivity Loop]</b> Regional Text-to-Speech Output</div>
-            </div>
-        </div>
-        <div style="font-size: 0.72rem; color: var(--text-dim); line-height: 1.4; border-top: 1px solid #1e293b; padding-top: 1rem;">
-            <b>Pitch DNA Check:</b> This implementation targets the 25% Deployability score by completely removing technical data-entry constraints from ground-level PHC staff.
-        </div>
-    </div>
-
-    <!-- MAIN CONSOLE INTERFACE -->
-    <div class="workspace">
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 1.2rem;">
-            <div>
-                <h1 style="font-size: 1.5rem; font-weight: 700;">PHC Structural Intelligence Dashboard</h1>
-                <p style="color: var(--text-dim); font-size: 0.85rem; margin-top: 2px;">Simulated Operational Sandbox Environment</p>
-            </div>
-            
-            <!-- 4-TIER GOVERNANCE ROLE SELECTOR -->
-            <div style="display: flex; gap: 10px; align-items: center; background-color: var(--bg-card); padding: 0.5rem; border-radius: 6px; border: 1px solid #1e293b;">
-                <label for="roleSelect" style="font-size: 0.8rem; color: var(--text-dim); font-weight: bold;">User Tier Frame:</label>
-                <select id="roleSelect" onchange="switchGovernanceRole()" style="background: var(--bg-main); color: var(--text-light); border: 1px solid #334155; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600; cursor: pointer;">
-                    <option value="staff">1. Ground Staff Worker view (Active MVP)</option>
-                    <option value="incharge">2. PHC In-Charge view (System Roadmap)</option>
-                    <option value="dm">3. District Magistrate view (System Roadmap)</option>
-                    <option value="mp">4. Member of Parliament view (System Roadmap)</option>
+            <div style="margin-top: 1.2rem;">
+                <label for="roleSelect" style="font-size: 0.85rem; color: var(--text-dim); display: block; font-weight: bold;">Switch Administration Tier Framework:</label>
+                <select id="roleSelect" onchange="handleRoleSwitch()">
+                    <option value="staff">1. Ground Staff Worker (Active Live MVP Sim)</option>
+                    <option value="incharge">2. PHC In-Charge View (System Roadmap)</option>
+                    <option value="dm">3. District Magistrate View (System Roadmap)</option>
+                    <option value="mp">4. Member of Parliament View (System Roadmap)</option>
                 </select>
             </div>
+        </header>
+
+        <div class="explainer-box" id="dynamicExplainer">
+            <strong>💡 Team Guide (Ground Staff Level):</strong> Matches the 25% Deployability rubric. Staff captures a picture of the paper logbook. Gemini Vision parses it without manual data entry workflows.
         </div>
 
-        <div class="grid">
+        <div class="alert-banner" id="predictionAlert">
+            <div>
+                <h4 style="color: var(--accent-red); font-size: 1rem;">⚠️ Inventory Depletion Threshold Triggered</h4>
+                <p style="font-size: 0.85rem; color: #cbd5e1; margin-top: 2px;">ORS inventory velocity indicates a complete stockout event within 3 days.</p>
+            </div>
+            <button class="action-btn voice-btn" onclick="triggerHindiAudioAlert()">🔊 Play Hindi Voice Alert</button>
+        </div>
+
+        <div class="section-card">
+            <h3 style="margin-bottom: 0.5rem;">📸 Step 1 & 2: Multimodal Pipeline Simulation</h3>
+            <p style="color: var(--text-dim); font-size: 0.85rem; margin-bottom: 1rem;">Click below to simulate data transmission to the Gemini extraction layer.</p>
             
-            <!-- TEAM RE-ASSURANCE META BLOCK -->
-            <div class="dev-explainer-box" id="architectureScopeGuidance">
-                <span style="color: var(--accent-blue); font-weight: bold;">⚙️ Architecture Node: Ground Staff Data Capture Configuration</span>
-                <p style="color: var(--text-dim); margin-top: 4px; line-height: 1.4;" id="scopeExplainerText">
-                    <b>Rules Match:</b> Minimal data entry workload pattern. The phone image payload directly scales standard JSON parameters to prompt actionable structural trends without workflow displacement.
-                </p>
-            </div>
+            <button class="action-btn" id="simBtn" onclick="executeMockPipeline()">Simulate Register Upload</button>
+            
+            <pre id="jsonBlock">// Awaiting input capture trigger workflow sequence...</pre>
+        </div>
 
-            <!-- Dynamic Regional TTS Notification Loop -->
-            <div class="action-banner" id="predictionAlert">
-                <div>
-                    <h4 style="color: var(--accent-red); font-size: 0.95rem;">⚠️ High Burn-Rate Depletion Flag</h4>
-                    <p style="font-size: 0.85rem; color: #cbd5e1; margin-top: 2px;" id="alertSubText">ORS Packets stock threshold breaking. Depletion expected within 72 hours based on dynamic consumption curves.</p>
-                </div>
-                <button class="speak-btn" onclick="executeRegionalVocalSiren()">🔊 Play Hindi Voice Alert</button>
-            </div>
-
-            <!-- Panel 1: Multi-modal Input Gate -->
-            <div class="card" id="inputBlockCard">
-                <h3 style="font-size: 1rem;">📸 Step 1: Zero-Friction Capture Interface</h3>
-                <p style="color: var(--text-dim); font-size: 0.8rem; margin-top: 2px;">Worker photographs paper register records with a mobile device.</p>
-                
-                <div class="upload-zone" onclick="runSimulationPipeline()">
-                    <span style="font-size: 2.2rem;">📱</span>
-                    <p style="font-weight: bold; font-size: 0.9rem; margin-top: 8px;">Trigger Simulation Pipeline</p>
-                    <p style="font-size: 0.75rem; color: var(--text-dim); margin-top: 4px;">Mimics byte stream transfer over standard REST endpoints</p>
-                </div>
-            </div>
-
-            <!-- Panel 2: Engine Payload Parse View -->
-            <div class="card" id="payloadBlockCard">
-                <h3 style="font-size: 1rem;">🤖 Step 2: Structured Target Payload Schema</h3>
-                <p style="color: var(--text-dim); font-size: 0.8rem; margin-top: 2px;">Gemini Multimodal JSON schema mapping of handwritten log contents.</p>
-                <pre id="jsonBlock" style="margin-top: 0.8rem;">// Awaiting active photo sequence execution input...</pre>
-            </div>
-
-            <!-- Panel 3 & 4: Relational Data Matrix View -->
-            <div class="card" style="grid-column: span 2;" id="matrixBlockCard">
-                <h3 style="font-size: 1rem;" id="tableHeadingTitle">📊 Step 3 & 4: Logistical Velocity & Prediction Matrix</h3>
-                <table id="dynamicLogisticalTable">
+        <div class="section-card">
+            <h3 id="tableTitle">📊 Step 3 & 4: Facility Logistical Analytics Matrix</h3>
+            <div style="overflow-x: auto;">
+                <table id="dataMatrixTable">
                     <thead>
-                        <tr id="tableDynamicHeader">
-                            <th>Tracked Entity</th>
-                            <th>Current Inventory Unit Level</th>
-                            <th>Daily Consumption Velocity</th>
-                            <th>Predicted Exhaustion Horizon</th>
-                            <th>System Operational Status</th>
+                        <tr id="tableHeaderRow">
+                            <th>Tracked Resource</th>
+                            <th>Current Stock Balance</th>
+                            <th>Daily Consumption Rate</th>
+                            <th>Estimated Depletion Timeline</th>
+                            <th>Status System Flag</th>
                         </tr>
                     </thead>
-                    <tbody id="tableDynamicBody">
+                    <tbody id="tableBodyContent">
                         <tr>
                             <td>Paracetamol 500mg</td>
                             <td>1200 Units</td>
                             <td>45 Units/Day</td>
                             <td>26 Days Remaining</td>
-                            <td style="color: var(--accent-green); font-weight: 600;">✅ Stable</td>
+                            <td style="color: var(--accent-green);">✅ Stable</td>
                         </tr>
-                        <tr id="criticalRow">
+                        <tr>
                             <td>ORS Packets</td>
                             <td>42 Units</td>
                             <td>14 Units/Day</td>
-                            <td class="alert-text">3 Days Remaining</td>
-                            <td class="alert-text">⚠️ Core Audio Target</td>
+                            <td class="text-danger">3 Days Remaining</td>
+                            <td class="text-danger">⚠️ Low Stock Flag</td>
                         </tr>
                         <tr>
-                            <td>Doctor Attendance Log</td>
-                            <td>3/3 Staff Authenticated</td>
+                            <td>Medical Officer Attendance</td>
+                            <td>3/3 Documented Present</td>
                             <td>--</td>
                             <td>--</td>
-                            <td style="color: var(--accent-green); font-weight: 600;">✅ Verified</td>
+                            <td style="color: var(--accent-green);">✅ Verified</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-
         </div>
+
     </div>
 
-    <!-- PIPELINE EXECUTION ENGINE SCRIPT -->
     <script>
-        // Execution sequence replication for baseline MVP demo presentation
-        function runSimulationPipeline() {
-            document.getElementById('n2').classList.add('completed');
-            
-            const geminiExtractedPayload = {
-                "system_meta": {
-                    "phc_block_id": "PHC-RURAL-MP-26A",
-                    "extraction_confidence": "96.8%",
-                    "timestamp": "2026-07-05T20:30:00Z"
+        // Executes standard presentation mock pipeline flow
+        function executeMockPipeline() {
+            const rawMockPayload = {
+                "meta": {
+                    "facility_node": "PHC-RURAL-BLOCK-26",
+                    "gemini_ocr_confidence": "97.2%"
                 },
                 "extracted_inventory": [
-                    { "sku": "Paracetamol 500mg", "balance": 1200, "burn_rate_7d": 45 },
-                    { "sku": "ORS Packets", "balance": 42, "burn_rate_7d": 14 }
+                    { "item": "Paracetamol 500mg", "current_stock": 1200 },
+                    { "item": "ORS Packets", "current_stock": 42 }
                 ],
-                "attendance_validation": {
-                    "expected_roster": 3,
-                    "verified_present": 3,
-                    "anomaly_detected": false
+                "staff_attendance": {
+                    "scheduled": 3,
+                    "extracted_present": 3
                 }
             };
 
-            document.getElementById('jsonBlock').textContent = JSON.stringify(geminiExtractedPayload, null, 4);
+            document.getElementById('jsonBlock').textContent = JSON.stringify(rawMockPayload, null, 4);
+            document.getElementById('predictionAlert').style.display = 'flex';
+        }
+
+        // Web Speech synthesis script for regional language loop configuration
+        function triggerHindiAudioAlert() {
+            const promptVoice = new SpeechSynthesisUtterance();
+            promptVoice.text = "ध्यान दें। प्राथमिक स्वास्थ्य केंद्र में ओ आर एस का स्टॉक तीन दिनों में समाप्त होने वाला है। कृपया तुरंत रीऑर्डर करें।";
+            promptVoice.lang = 'hi-IN';
+            promptVoice.rate = 0.95;
+            window.speechSynthesis.speak(promptVoice);
+        }
+
+        // System Tier Navigation Switcher Mapping Content
+        function handleRoleSwitch() {
+            const currentSelected = document.getElementById('roleSelect').value;
+            const explainerBox = document.getElementById('dynamicExplainer');
+            const jsonDisplay = document.getElementById('jsonBlock');
+            const tableTitle = document.getElementById('tableTitle');
+            const tableHeader = document.getElementById('tableHeaderRow');
+            const tableBody = document.getElementById('tableBodyContent');
             
-            setTimeout(() => {
-                document.getElementById('n3').classList.add('completed');
-                document.getElementById('n4').classList.add('completed');
-                document.getElementById('predictionAlert').style.display = 'flex';
-            }, 600);
-        }
+            // Reset state defaults
+            document.getElementById('predictionAlert').style.display = 'none';
 
-        // Native Native Synthesis Core Web Layer representing Cloud TTS endpoint execution
-        function executeRegionalVocalSiren() {
-            const vocalSiren = new SpeechSynthesisUtterance();
-            vocalSiren.text = "ध्यान दें। प्राथमिक स्वास्थ्य केंद्र में ओ आर एस का स्टॉक तीन दिनों में समाप्त होने वाला है। कृपया तुरंत रिऑर्डर की प्रक्रिया शुरू करें।";
-            vocalSiren.lang = 'hi-IN';
-            vocalSiren.rate = 0.95;
-            window.speechSynthesis.speak(vocalSiren);
-        }
-
-        // High-Yield Governance Switcher System Engine (Matches Pitch Deck Roadmap Data Layers)
-        function switchGovernanceRole() {
-            const currentTier = document.getElementById('roleSelect').value;
-            const nodeExplainer = document.getElementById('scopeExplainerText');
-            const explainerTitle = document.querySelector('#architectureScopeGuidance span');
-            const jsonBlock = document.getElementById('jsonBlock');
-            const tableTitle = document.getElementById('tableHeadingTitle');
-            const tHeader = document.getElementById('tableDynamicHeader');
-            const tBody = document.getElementById('tableDynamicBody');
-
-            if (currentTier === 'staff') {
-                explainerTitle.textContent = "⚙️ Architecture Node: Ground Staff Data Capture Configuration";
-                nodeExplainer.innerHTML = "<b>Rules Match:</b> Minimal data entry workload pattern. The phone image payload directly scales standard JSON parameters to prompt actionable structural trends without workflow displacement.";
-                tableTitle.textContent = "📊 Step 3 & 4: Logistical Velocity & Prediction Matrix";
-                tHeader.innerHTML = "<th>Tracked Entity</th><th>Current Inventory Unit Level</th><th>Daily Consumption Velocity</th><th>Predicted Exhaustion Horizon</th><th>System Operational Status</th>";
-                tBody.innerHTML = "<tr><td>Paracetamol 500mg</td><td>1200 Units</td><td>45 Units/Day</td><td>26 Days</td><td style='color: var(--accent-green);'>✅ Stable</td></tr><tr class='alert-text'><td>ORS Packets</td><td>42 Units</td><td>14 Units/Day</td><td>3 Days</td><td>⚠️ Core Audio Target</td></tr><tr><td>Doctor Attendance Log</td><td>3/3 Staff Authenticated</td><td>--</td><td>--</td><td style='color: var(--accent-green);'>✅ Verified</td></tr>";
-                jsonBlock.textContent = "// Awaiting active photo sequence execution input...";
-                document.getElementById('predictionAlert').style.display = 'none';
-                document.getElementById('n2').classList.remove('completed');
-                document.getElementById('n3').classList.remove('completed');
-                document.getElementById('n4').classList.remove('completed');
+            if (currentSelected === 'staff') {
+                explainerBox.innerHTML = "<strong>💡 Team Guide (Ground Staff Level):</strong> Matches the 25% Deployability rubric. Staff captures a picture of the paper logbook. Gemini Vision parses it without manual data entry workflows.";
+                tableTitle.textContent = "📊 Step 3 & 4: Facility Logistical Analytics Matrix";
+                tableHeader.innerHTML = "<th>Tracked Resource</th><th>Current Stock Balance</th><th>Daily Consumption Rate</th><th>Estimated Depletion Timeline</th><th>Status System Flag</th>";
+                tableBody.innerHTML = "<tr><td>Paracetamol 500mg</td><td>1200 Units</td><td>45 Units/Day</td><td>26 Days Remaining</td><td style='color: var(--accent-green);'>✅ Stable</td></tr><tr><td>ORS Packets</td><td>42 Units</td><td>14 Units/Day</td><td class='text-danger'>3 Days Remaining</td><td class='text-danger'>⚠️ Low Stock Flag</td></tr><tr><td>Medical Officer Attendance</td><td>3/3 Documented Present</td><td>--</td><td>--</td><td style='color: var(--accent-green);'>✅ Verified</td></tr>";
+                jsonDisplay.textContent = "// Awaiting input capture trigger workflow sequence...";
             } 
-            else if (currentTier === 'incharge') {
-                explainerTitle.textContent = "⚙️ Architecture Node: PHC In-Charge Operational Overlook View";
-                nodeExplainer.innerHTML = "<b>Data Utility:</b> Local supervisor oversees resource constraints, internal absenteeism rates, and operational bottlenecks across their single specific medical post.";
-                jsonBlock.textContent = JSON.stringify({
-                    "layer": "PHC_Incharge_Operational_Log",
+            else if (currentSelected === 'incharge') {
+                explainerBox.innerHTML = "<strong>💡 Team Guide (PHC In-Charge level):</strong> Shows localized operational parameters. Helps the immediate medical supervisor manage workflows and approve immediate reorders.";
+                jsonDisplay.textContent = JSON.stringify({
+                    "view_scope": "PHC_Supervisor_Console",
                     "facility_id": "PHC-INDORE-04",
-                    "personnel_status": { "active_doctors": 3, "attendance_anomaly": "None" },
-                    "critical_alerts_unaddressed": 1
+                    "cold_chain_fridge_temp": "4.1 C",
+                    "pending_procurement_orders": 1
                 }, null, 4);
-                tableTitle.textContent = "📊 Facility Supervisor Micro-Operational Console";
-                tHeader.innerHTML = "<th>Operational Track</th><th>Status Metric</th><th>Log Source</th><th>Action Required</th>";
-                tBody.innerHTML = "<tr><td>Medicine Cold Chain</td><td>4.2°C (Optimal)</td><td>IoT Sensor Node 1B</td><td style='color: var(--accent-green);'>No Action</td></tr><tr><td>Emergency ORS Stock</td><td>42 Units Remaining</td><td>Gemini Vision Engine</td><td style='color: var(--accent-red); font-weight:bold;'>Approve Procurement Requisition</td></tr>";
+                tableTitle.textContent = "📊 Local Facility Management Tracking Grid";
+                tableHeader.innerHTML = "<th>Operational Track</th><th>Status Metric</th><th>Infrastructure Log</th><th>Action Requirement</th>";
+                tableBody.innerHTML = "<tr><td>Cold Chain Assets</td><td>4.1°C (Optimal)</td><td>Sensor Stream Node-A</td><td style='color: var(--accent-green);'>Operational</td></tr><tr><td>ORS Stock Alert</td><td>42 Units Remaining</td><td>Gemini Pipeline Extracted</td><td class='text-danger'>Approve Procurement Voucher</td></tr>";
             } 
-            else if (currentTier === 'dm') {
-                explainerTitle.textContent = "⚙️ Architecture Node: District Magistrate Macro Resource Optimizer";
-                nodeExplainer.innerHTML = "<b>Data Utility:</b> Aggregates parsed records from all regional medical nodes to run cross-facility geographical inventory rebalancing structures.";
-                jsonBlock.textContent = JSON.stringify({
-                    "layer": "District_Magistrate_Consolidated_Heatmap",
-                    "district_jurisdiction": "Indore Region",
-                    "active_reporting_facilities": 42,
-                    "critical_stockout_zones": ["PHC-Mhow", "PHC-Depalpur"],
-                    "rebalancing_recommendation": "Transfer 400 Units Paracetamol from PHC-Sanwer (Surplus Zone)"
+            else if (currentSelected === 'dm') {
+                explainerBox.innerHTML = "<strong>💡 Team Guide (District Magistrate Level):</strong> Aggregates cross-PHC trends across the district. Enables resource rebalancing models to shift surplus stock to deficit areas.";
+                jsonDisplay.textContent = JSON.stringify({
+                    "view_scope": "District_Magistrate_Logistical_Map",
+                    "active_reporting_phcs": 42,
+                    "critical_deficits_detected": ["PHC-Mhow", "PHC-Depalpur"],
+                    "rebalancing_recommendation": "Shift 400 Units from PHC-Sanwer (Surplus Node)"
                 }, null, 4);
-                tableTitle.textContent = "🗺️ District Healthcare Optimization Matrices";
-                tHeader.innerHTML = "<th>PHC Facility Name</th><th>Stock Out Alert Risks</th><th>Doctor Shortage Risk Index</th><th>Logistical Transfer Action Status</th>";
-                tBody.innerHTML = "<tr><td>PHC Mhow</td><td style='color: var(--accent-red);'>Critical (ORS)</td><td>Low (0.02)</td><td>Route Logistics Dispatch 04</td></tr><tr><td>PHC Sanwer</td><td>None (Surplus)</td><td>Low (0.00)</td><td>Fulfill Rebalancing Request Outbound</td></tr>";
+                tableTitle.textContent = "🗺️ District Level Resource Allocation Optimization Matrix";
+                tableHeader.innerHTML = "<th>Target PHC Location</th><th>Identified Deficit Profile</th><th>Surplus Asset Node Link</th><th>Logistical Directive Status</th>";
+                tableBody.innerHTML = "<tr><td>PHC Mhow</td><td class='text-danger'>Critical Stockout (ORS)</td><td>PHC Sanwer (Surplus Layer)</td><td>Route Logistics Dispatch 04 Active</td></tr>";
             } 
-            else if (currentTier === 'mp') {
-                explainerTitle.textContent = "⚙️ Architecture Node: Member of Parliament Strategic Governance View";
-                nodeExplainer.innerHTML = "<b>Data Utility:</b> High-level data tracking transparency across legislative areas. Provides direct structural evidence of infrastructure development and budget spending optimizations.";
-                jsonBlock.textContent = JSON.stringify({
-                    "layer": "MP_Constituency_Strategic_Overview",
-                    "constituency_code": "MP-WEST-26",
-                    "gross_population_served": 482000,
-                    "budget_allocation_efficiency": "96.4%",
-                    "preventable_stockout_events_avoided": 142
+            else if (currentSelected === 'mp') {
+                explainerBox.innerHTML = "<strong>💡 Team Guide (Member of Parliament Level):</strong> Macro metrics on development, funding deployment efficiency, and population safety thresholds across their specific legislative area.";
+                jsonDisplay.textContent = JSON.stringify({
+                    "view_scope": "MP_Constituency_Governance_Audit",
+                    "constituency_id": "MP-WEST-26",
+                    "estimated_population_protected": 482000,
+                    "budget_spending_efficiency": "96.4%",
+                    "preventable_stockouts_averted_mtd": 142
                 }, null, 4);
-                tableTitle.textContent = "🏛️ Legislative Constituency High-Level Metrics";
-                tHeader.innerHTML = "<th>Constituency Regional Block</th><th>Active Medical Network Coverage</th><th>Resource Depletion Risk Average</th><th>Budget Output Optimization</th>";
-                tBody.innerHTML = "<tr><td>Indore Rural West</td><td>14 Functional PHCs</td><td>Minimal (2.1%)</td><td style='color: var(--accent-green); font-weight:600;'>94.2% Audit Clean Rate</td></tr>";
+                tableTitle.textContent = "🏛️ Legislative High-Level Development Indices";
+                tableHeader.innerHTML = "<th>Constituency Block</th><th>Active Medical Coverage Nodes</th><th>Resource Vulnerability Average</th><th>Budget Output Status</th>";
+                tableBody.innerHTML = "<tr><td>Indore Rural Sector</td><td>14 Functional PHCs</td><td>2.1% (Low Risk)</td><td style='color: var(--accent-green); font-weight:600;'>94.2% Audit Clean Optimization</td></tr>";
             }
         }
     </script>
