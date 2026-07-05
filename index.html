@@ -3,337 +3,305 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register-to-Insight | PHC Digitization</title>
+    <title>Track 3: Smart Health Governance Engine | Code for Communities</title>
     <style>
         :root {
-            --bg-main: #0f172a;
-            --bg-card: #1e293b;
-            --accent-primary: #3b82f6;
-            --accent-success: #10b981;
-            --accent-warning: #f59e0b;
-            --accent-danger: #ef4444;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
+            --bg-main: #0b0f19;
+            --bg-card: #131c2e;
+            --bg-tech: #1e293b;
+            --accent-blue: #38bdf8;
+            --accent-green: #34d399;
+            --accent-warning: #fbbf24;
+            --accent-red: #f87171;
+            --text-light: #f8fafc;
+            --text-dim: #64748b;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         body {
             background-color: var(--bg-main);
-            color: var(--text-main);
+            color: var(--text-light);
             display: flex;
             min-height: 100vh;
+            overflow: hidden;
         }
 
-        /* Sidebar Navigation */
+        /* Lateral Navigation Pipeline Map */
         .sidebar {
-            width: 280px;
+            width: 320px;
             background-color: var(--bg-card);
-            border-right: 1px solid #334155;
-            padding: 2rem;
+            border-right: 1px solid #1e293b;
+            padding: 1.5rem;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
 
-        .brand h2 {
-            font-size: 1.4rem;
-            color: var(--accent-primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .brand p {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .pipeline-flow {
-            margin-top: 2rem;
-        }
-
-        .pipeline-step {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 1.5rem;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
-        .pipeline-step.active {
-            color: var(--text-main);
+        .track-badge {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-blue);
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
             font-weight: bold;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 1rem;
         }
 
-        .step-dot {
-            width: 10px;
-            height: 10px;
-            background-color: #475569;
-            border-radius: 50%;
+        .pipeline-map {
+            margin-top: 1.5rem;
         }
 
-        .pipeline-step.active .step-dot {
-            background-color: var(--accent-primary);
-            box-shadow: 0 0 8px var(--accent-primary);
+        .node {
+            padding: 0.75rem;
+            border-left: 2px solid #334155;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            transition: all 0.3s ease;
         }
 
-        /* Main Dashboard Content */
-        .main-content {
+        .node.completed {
+            border-left-color: var(--accent-blue);
+            color: var(--text-light);
+        }
+
+        /* Central Workspace */
+        .workspace {
             flex: 1;
-            padding: 2.5rem;
+            padding: 2rem;
             overflow-y: auto;
         }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2.5rem;
-            border-bottom: 1px solid #334155;
-            padding-bottom: 1rem;
-        }
-
-        .badge {
-            background: rgba(59, 130, 246, 0.1);
-            color: var(--accent-primary);
-            padding: 0.4rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-        }
-
-        .grid-layout {
+        .grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 2rem;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
         }
 
         .card {
             background-color: var(--bg-card);
-            border: 1px solid #334155;
-            border-radius: 12px;
-            padding: 1.5rem;
-        }
-
-        .card-title {
-            font-size: 1.1rem;
-            margin-bottom: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* Upload Area Components */
-        .upload-box {
-            border: 2px dashed #475569;
-            border-radius: 8px;
-            padding: 3rem 1rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .upload-box:hover {
-            border-color: var(--accent-primary);
-            background: rgba(59, 130, 246, 0.02);
-        }
-
-        .upload-btn {
-            background-color: var(--accent-primary);
-            color: white;
-            border: none;
-            padding: 0.6rem 1.2rem;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 1rem;
-        }
-
-        /* JSON View Component */
-        pre {
-            background-color: #0f172a;
-            padding: 1rem;
-            border-radius: 6px;
-            color: #38bdf8;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.85rem;
-            overflow-x: auto;
             border: 1px solid #1e293b;
-            max-height: 250px;
+            border-radius: 8px;
+            padding: 1.5rem;
         }
 
-        /* Alert and Prediction Banner */
-        .alert-banner {
+        /* Dev Operational Banner */
+        .dev-explainer-box {
             grid-column: span 2;
-            background: linear-gradient(90deg, rgba(239,68,68,0.15) 0%, rgba(30,41,59,1) 100%);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            border-radius: 12px;
-            padding: 1.5rem;
+            background-color: #0f172a;
+            border: 1px dashed var(--accent-blue);
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 0.85rem;
+        }
+
+        /* System Critical Alert Modules */
+        .action-banner {
+            grid-column: span 2;
+            background: linear-gradient(90deg, rgba(248,113,113,0.15) 0%, rgba(19,28,46,1) 100%);
+            border: 1px solid rgba(248, 113, 113, 0.3);
+            border-radius: 8px;
+            padding: 1.2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            display: none; /* Controlled by JS simulation */
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
         }
 
-        .alert-info h3 {
-            color: var(--accent-danger);
-            margin-bottom: 0.3rem;
-        }
-
-        .voice-btn {
+        .speak-btn {
             background-color: var(--accent-warning);
-            color: #0f172a;
+            color: #000;
             border: none;
-            padding: 0.7rem 1.5rem;
-            border-radius: 6px;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
             font-weight: bold;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
             transition: transform 0.2s;
         }
 
-        .voice-btn:hover {
-            transform: scale(1.03);
+        .speak-btn:hover {
+            transform: scale(1.02);
         }
 
-        /* Stock Status Table Component */
+        /* Functional Elements */
+        .upload-zone {
+            border: 2px dashed #334155;
+            border-radius: 6px;
+            padding: 2.5rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .upload-zone:hover {
+            border-color: var(--accent-blue);
+        }
+        
+        pre {
+            background-color: #0b0f19;
+            padding: 1rem;
+            border-radius: 6px;
+            color: #a7f3d0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.8rem;
+            overflow-x: auto;
+            max-height: 220px;
+            border: 1px solid #1e293b;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 0.5rem;
+            margin-top: 1rem;
+            font-size: 0.85rem;
         }
 
         th, td {
-            padding: 0.75rem;
+            padding: 0.75rem 0.6rem;
             text-align: left;
-            border-bottom: 1px solid #334155;
-            font-size: 0.9rem;
+            border-bottom: 1px solid #1e293b;
         }
 
         th {
-            color: var(--text-muted);
+            color: var(--text-dim);
             font-weight: 600;
         }
 
-        .status-critical {
-            color: var(--accent-danger);
+        .alert-text {
+            color: var(--accent-red);
             font-weight: bold;
         }
 
-        .status-safe {
-            color: var(--accent-success);
-        }
-
-        .footer-note {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            text-align: center;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
+    <!-- SIDEBAR: Structural Alignment Mapping -->
     <div class="sidebar">
-        <div class="brand">
-            <h2>Register-to-Insight</h2>
-            <p>PHC Data Digitization + AI</p>
+        <div>
+            <span class="track-badge">🏥 Track 3 — Smart Health</span>
+            <h2 style="font-size: 1.25rem; letter-spacing: -0.5px;">Register-to-Insight</h2>
+            <p style="font-size: 0.8rem; color: var(--text-dim); margin-top: 4px;">Zero-Behavior Governance Pipeline</p>
             
-            <div class="pipeline-flow">
-                <div class="pipeline-step active" id="step1"><span class="step-dot"></span> 1. Image Capture</div>
-                <div class="pipeline-step" id="step2"><span class="step-dot"></span> 2. Gemini Multimodal OCR</div>
-                <div class="pipeline-step" id="step3"><span class="step-dot"></span> 3. Threshold Engine</div>
-                <div class="pipeline-step" id="step4"><span class="step-dot"></span> 4. TTS Regional Alert</div>
+            <div class="pipeline-map">
+                <div class="node completed" id="n1"><b>[Capture]</b> Manual Paper Log Snapshot</div>
+                <div class="node" id="n2"><b>[AI Extraction]</b> Gemini Multimodal Handwriting Parsing</div>
+                <div class="node" id="n3"><b>[ML Engine]</b> Velocity & Burn-Rate Analytics</div>
+                <div class="node" id="n4"><b>[Inclusivity Loop]</b> Regional Text-to-Speech Output</div>
             </div>
         </div>
-        <div class="footer-note">
-            <p>July 8 MVP Sprint Build</p>
-            <p>Zero behavior change for rural staff</p>
+        <div style="font-size: 0.72rem; color: var(--text-dim); line-height: 1.4; border-top: 1px solid #1e293b; padding-top: 1rem;">
+            <b>Pitch DNA Check:</b> This implementation targets the 25% Deployability score by completely removing technical data-entry constraints from ground-level PHC staff.
         </div>
     </div>
 
-    <div class="main-content">
-        <div class="header">
+    <!-- MAIN CONSOLE INTERFACE -->
+    <div class="workspace">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 1.2rem;">
             <div>
-                <h1>Primary Health Centre Dashboard</h1>
-                <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 4px;">Real-time stock monitoring from manual paper logs</p>
+                <h1 style="font-size: 1.5rem; font-weight: 700;">PHC Structural Intelligence Dashboard</h1>
+                <p style="color: var(--text-dim); font-size: 0.85rem; margin-top: 2px;">Simulated Operational Sandbox Environment</p>
             </div>
-            <span class="badge">Live MVP Engine</span>
+            
+            <!-- 4-TIER GOVERNANCE ROLE SELECTOR -->
+            <div style="display: flex; gap: 10px; align-items: center; background-color: var(--bg-card); padding: 0.5rem; border-radius: 6px; border: 1px solid #1e293b;">
+                <label for="roleSelect" style="font-size: 0.8rem; color: var(--text-dim); font-weight: bold;">User Tier Frame:</label>
+                <select id="roleSelect" onchange="switchGovernanceRole()" style="background: var(--bg-main); color: var(--text-light); border: 1px solid #334155; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600; cursor: pointer;">
+                    <option value="staff">1. Ground Staff Worker view (Active MVP)</option>
+                    <option value="incharge">2. PHC In-Charge view (System Roadmap)</option>
+                    <option value="dm">3. District Magistrate view (System Roadmap)</option>
+                    <option value="mp">4. Member of Parliament view (System Roadmap)</option>
+                </select>
+            </div>
         </div>
 
-        <div class="grid-layout">
+        <div class="grid">
             
-            <div class="alert-banner" id="predictionAlert">
-                <div class="alert-info">
-                    <h3>⚠️ Automated Stockout Risk Detected</h3>
-                    <p id="alertText">ORS (Oral Rehydration Salts) will run out in 3 days based on current consumption velocity.</p>
-                </div>
-                <button class="voice-btn" onclick="playVoiceAlert()">
-                    🔊 Speak Alert (Hindi)
-                </button>
-            </div>
-
-            <div class="card">
-                <div class="card-title">📸 Step 1: Upload Paper Register Entry</div>
-                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">
-                    Staff takes a snapshot of the logbook. No computer literacy needed.
+            <!-- TEAM RE-ASSURANCE META BLOCK -->
+            <div class="dev-explainer-box" id="architectureScopeGuidance">
+                <span style="color: var(--accent-blue); font-weight: bold;">⚙️ Architecture Node: Ground Staff Data Capture Configuration</span>
+                <p style="color: var(--text-dim); margin-top: 4px; line-height: 1.4;" id="scopeExplainerText">
+                    <b>MVP Operations:</b> This interface parses image streams directly into structural matrices. Use the selector above during the recording phase to explicitly demonstrate scalability to secondary administration cadres.
                 </p>
-                <div class="upload-box" onclick="simulatePipeline()">
-                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📄</div>
-                    <p style="font-weight: 600;">Drop paper register photo here or click to browse</p>
-                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">Supports JPG, PNG from smartphone camera</p>
-                    <button class="upload-btn">Simulate Demo Flow</button>
+            </div>
+
+            <!-- Dynamic Regional TTS Notification Loop -->
+            <div class="action-banner" id="predictionAlert">
+                <div>
+                    <h4 style="color: var(--accent-red); font-size: 0.95rem;">⚠️ High Burn-Rate Depletion Flag</h4>
+                    <p style="font-size: 0.85rem; color: #cbd5e1; margin-top: 2px;" id="alertSubText">ORS Packets stock threshold breaking. Depletion expected within 72 hours based on dynamic consumption curves.</p>
+                </div>
+                <button class="speak-btn" onclick="executeRegionalVocalSiren()">🔊 Play Hindi Voice Alert</button>
+            </div>
+
+            <!-- Panel 1: Multi-modal Input Gate -->
+            <div class="card" id="inputBlockCard">
+                <h3 style="font-size: 1rem;">📸 Step 1: Zero-Friction Capture Interface</h3>
+                <p style="color: var(--text-dim); font-size: 0.8rem; margin-top: 2px;">Worker photographs paper register records with a mobile device.</p>
+                
+                <div class="upload-zone" onclick="runSimulationPipeline()">
+                    <span style="font-size: 2.2rem;">📱</span>
+                    <p style="font-weight: bold; font-size: 0.9rem; margin-top: 8px;">Trigger Simulation Pipeline</p>
+                    <p style="font-size: 0.75rem; color: var(--text-dim); margin-top: 4px;">Mimics byte stream transfer over standard REST endpoints</p>
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-title">🤖 Step 2: Gemini API Extracted JSON</div>
-                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">
-                    Multimodal vision extracts unformatted, handwritten table cells seamlessly.
-                </p>
-                <pre id="jsonOutput">// Upload an image to view structured JSON schema payload...</pre>
+            <!-- Panel 2: Engine Payload Parse View -->
+            <div class="card" id="payloadBlockCard">
+                <h3 style="font-size: 1rem;">🤖 Step 2: Structured Target Payload Schema</h3>
+                <p style="color: var(--text-dim); font-size: 0.8rem; margin-top: 2px;">Gemini Multimodal JSON schema mapping of handwritten log contents.</p>
+                <pre id="jsonBlock" style="margin-top: 0.8rem;">// Awaiting active photo sequence execution input...</pre>
             </div>
 
-            <div class="card" style="grid-column: span 2;">
-                <div class="card-title">📊 Step 3 & 4: Inventory Thresholds & Forecast Insights</div>
-                <table>
+            <!-- Panel 3 & 4: Relational Data Matrix View -->
+            <div class="card" style="grid-column: span 2;" id="matrixBlockCard">
+                <h3 style="font-size: 1rem;" id="tableHeadingTitle">📊 Step 3 & 4: Logistical Velocity & Prediction Matrix</h3>
+                <table id="dynamicLogisticalTable">
                     <thead>
-                        <tr>
-                            <th>Drug Name</th>
-                            <th>Current Inventory</th>
-                            <th>Daily Burn Rate (Avg)</th>
-                            <th>Days Remaining Forecast</th>
-                            <th>System Status Action</th>
+                        <tr id="tableDynamicHeader">
+                            <th>Tracked Entity</th>
+                            <th>Current Inventory Unit Level</th>
+                            <th>Daily Consumption Velocity</th>
+                            <th>Predicted Exhaustion Horizon</th>
+                            <th>System Operational Status</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tableDynamicBody">
                         <tr>
                             <td>Paracetamol 500mg</td>
-                            <td>1,200 units</td>
-                            <td>45 units/day</td>
-                            <td>26 Days</td>
-                            <td class="status-safe">✅ Optimal Stock</td>
+                            <td>1200 Units</td>
+                            <td>45 Units/Day</td>
+                            <td>26 Days Remaining</td>
+                            <td style="color: var(--accent-green); font-weight: 600;">✅ Stable</td>
                         </tr>
-                        <tr id="orsRow">
+                        <tr id="criticalRow">
                             <td>ORS Packets</td>
-                            <td>42 units</td>
-                            <td>14 units/day</td>
-                            <td class="status-critical" id="orsDays">3 Days</td>
-                            <td class="status-critical" id="orsStatus">⚠️ High Alert Triggered</td>
+                            <td>42 Units</td>
+                            <td>14 Units/Day</td>
+                            <td class="alert-text">3 Days Remaining</td>
+                            <td class="alert-text">⚠️ Core Audio Target</td>
                         </tr>
                         <tr>
-                            <td>Amoxicillin 250mg</td>
-                            <td>850 units</td>
-                            <td>20 units/day</td>
-                            <td>42 Days</td>
-                            <td class="status-safe">✅ Optimal Stock</td>
+                            <td>Doctor Attendance Log</td>
+                            <td>3/3 Staff Authenticated</td>
+                            <td>--</td>
+                            <td>--</td>
+                            <td style="color: var(--accent-green); font-weight: 600;">✅ Verified</td>
                         </tr>
                     </tbody>
                 </table>
@@ -342,41 +310,110 @@
         </div>
     </div>
 
+    <!-- PIPELINE EXECUTION ENGINE SCRIPT -->
     <script>
-        function simulatePipeline() {
-            // Step updates
-            document.getElementById('step2').classList.add('active');
+        // Execution sequence replication for baseline MVP demo presentation
+        function runSimulationPipeline() {
+            document.getElementById('n2').classList.add('completed');
             
-            // Mocking Gemini Response
-            const mockGeminiJSON = {
-                "phc_metadata": {
-                    "extracted_timestamp": "2026-07-05T20:15:00Z",
-                    "confidence_score": 0.94
+            const geminiExtractedPayload = {
+                "system_meta": {
+                    "phc_block_id": "PHC-RURAL-MP-26A",
+                    "extraction_confidence": "96.8%",
+                    "timestamp": "2026-07-05T20:30:00Z"
                 },
-                "logbook_data": [
-                    { "item": "Paracetamol 500mg", "current_balance": 1200, "logged_date": "05-07-2026" },
-                    { "item": "ORS Packets", "current_balance": 42, "logged_date": "05-07-2026" },
-                    { "item": "Amoxicillin 250mg", "current_balance": 850, "logged_date": "05-07-2026" }
-                ]
+                "extracted_inventory": [
+                    { "sku": "Paracetamol 500mg", "balance": 1200, "burn_rate_7d": 45 },
+                    { "sku": "ORS Packets", "balance": 42, "burn_rate_7d": 14 }
+                ],
+                "attendance_validation": {
+                    "expected_roster": 3,
+                    "verified_present": 3,
+                    "anomaly_detected": false
+                }
             };
 
-            document.getElementById('jsonOutput').textContent = JSON.stringify(mockGeminiJSON, null, 4);
+            document.getElementById('jsonBlock').textContent = JSON.stringify(geminiExtractedPayload, null, 4);
             
-            // Trigger ML alert modules
             setTimeout(() => {
-                document.getElementById('step3').classList.add('active');
+                document.getElementById('n3').classList.add('completed');
+                document.getElementById('n4').classList.add('completed');
                 document.getElementById('predictionAlert').style.display = 'flex';
-                document.getElementById('step4').classList.add('active');
-            }, 800);
+            }, 600);
         }
 
-        function playVoiceAlert() {
-            // Using Web Speech API to simulate the Cloud TTS Hindi Voice Output for presentation
-            const alertMsg = new SpeechSynthesisUtterance();
-            alertMsg.text = "सावधान। ओ आर एस स्टॉक तीन दिनों में समाप्त हो जाएगा। कृपया रीऑर्डर करें।";
-            alertMsg.lang = 'hi-IN';
-            alertMsg.rate = 0.9; 
-            window.speechSynthesis.speak(alertMsg);
+        // Native Native Synthesis Core Web Layer representing Cloud TTS endpoint execution
+        function executeRegionalVocalSiren() {
+            const vocalSiren = new SpeechSynthesisUtterance();
+            vocalSiren.text = "ध्यान दें। प्राथमिक स्वास्थ्य केंद्र में ओ आर एस का स्टॉक तीन दिनों में समाप्त होने वाला है। कृपया तुरंत रिऑर्डर की प्रक्रिया शुरू करें।";
+            vocalSiren.lang = 'hi-IN';
+            vocalSiren.rate = 0.95;
+            window.speechSynthesis.speak(vocalSiren);
+        }
+
+        // High-Yield Governance Switcher System Engine (Matches Pitch Deck Roadmap Data Layers)
+        function switchGovernanceRole() {
+            const currentTier = document.getElementById('roleSelect').value;
+            const nodeExplainer = document.getElementById('scopeExplainerText');
+            const explainerTitle = document.querySelector('#architectureScopeGuidance span');
+            const jsonBlock = document.getElementById('jsonBlock');
+            const tableTitle = document.getElementById('tableHeadingTitle');
+            const tHeader = document.getElementById('tableDynamicHeader');
+            const tBody = document.getElementById('tableDynamicBody');
+
+            if (currentTier === 'staff') {
+                explainerTitle.textContent = "⚙️ Architecture Node: Ground Staff Data Capture Configuration";
+                nodeExplainer.innerHTML = "<b>Rules Match:</b> Minimal data entry workload pattern. The phone image payload directly scales standard JSON parameters to prompt actionable structural trends without workflow displacement.";
+                tableTitle.textContent = "📊 Step 3 & 4: Logistical Velocity & Prediction Matrix";
+                tHeader.innerHTML = "<th>Tracked Entity</th><th>Current Inventory Unit Level</th><th>Daily Consumption Velocity</th><th>Predicted Exhaustion Horizon</th><th>System Operational Status</th>";
+                tBody.innerHTML = "<tr><td>Paracetamol 500mg</td><td>1200 Units</td><td>45 Units/Day</td><td>26 Days</td><td style='color: var(--accent-green);'>✅ Stable</td></tr><tr class='alert-text'><td>ORS Packets</td><td>42 Units</td><td>14 Units/Day</td><td>3 Days</td><td>⚠️ Core Audio Target</td></tr><tr><td>Doctor Attendance Log</td><td>3/3 Staff Authenticated</td><td>--</td><td>--</td><td style='color: var(--accent-green);'>✅ Verified</td></tr>";
+                jsonBlock.textContent = "// Awaiting active photo sequence execution input...";
+                document.getElementById('predictionAlert').style.display = 'none';
+                document.getElementById('n2').classList.remove('completed');
+                document.getElementById('n3').classList.remove('completed');
+                document.getElementById('n4').classList.remove('completed');
+            } 
+            else if (currentTier === 'incharge') {
+                explainerTitle.textContent = "⚙️ Architecture Node: PHC In-Charge Operational Overlook View";
+                nodeExplainer.innerHTML = "<b>Data Utility:</b> Local supervisor oversees resource constraints, internal absenteeism rates, and operational bottlenecks across their single specific medical post.";
+                jsonBlock.textContent = JSON.stringify({
+                    "layer": "PHC_Incharge_Operational_Log",
+                    "facility_id": "PHC-INDORE-04",
+                    "personnel_status": { "active_doctors": 3, "attendance_anomaly": "None" },
+                    "critical_alerts_unaddressed": 1
+                }, null, 4);
+                tableTitle.textContent = "📊 Facility Supervisor Micro-Operational Console";
+                tHeader.innerHTML = "<th>Operational Track</th><th>Status Metric</th><th>Log Source</th><th>Action Required</th>";
+                tBody.innerHTML = "<tr><td>Medicine Cold Chain</td><td>4.2°C (Optimal)</td><td>IoT Sensor Node 1B</td><td style='color: var(--accent-green);'>No Action</td></tr><tr><td>Emergency ORS Stock</td><td>42 Units Remaining</td><td>Gemini Vision Engine</td><td style='color: var(--accent-red); font-weight:bold;'>Approve Procurement Requisition</td></tr>";
+            } 
+            else if (currentTier === 'dm') {
+                explainerTitle.textContent = "⚙️ Architecture Node: District Magistrate Macro Resource Optimizer";
+                nodeExplainer.innerHTML = "<b>Data Utility:</b> Aggregates parsed records from all regional medical nodes to run cross-facility geographical inventory rebalancing structures.";
+                jsonBlock.textContent = JSON.stringify({
+                    "layer": "District_Magistrate_Consolidated_Heatmap",
+                    "district_jurisdiction": "Indore Region",
+                    "active_reporting_facilities": 42,
+                    "critical_stockout_zones": ["PHC-Mhow", "PHC-Depalpur"],
+                    "rebalancing_recommendation": "Transfer 400 Units Paracetamol from PHC-Sanwer (Surplus Zone)"
+                }, null, 4);
+                tableTitle.textContent = "🗺️ District Healthcare Optimization Matrices";
+                tHeader.innerHTML = "<th>PHC Facility Name</th><th>Stock Out Alert Risks</th><th>Doctor Shortage Risk Index</th><th>Logistical Transfer Action Status</th>";
+                tBody.innerHTML = "<tr><td>PHC Mhow</td><td style='color: var(--accent-red);'>Critical (ORS)</td><td>Low (0.02)</td><td>Route Logistics Dispatch 04</td></tr><tr><td>PHC Sanwer</td><td>None (Surplus)</td><td>Low (0.00)</td><td>Fulfill Rebalancing Request Outbound</td></tr>";
+            } 
+            else if (currentTier === 'mp') {
+                explainerTitle.textContent = "⚙️ Architecture Node: Member of Parliament Strategic Governance View";
+                nodeExplainer.innerHTML = "<b>Data Utility:</b> High-level data tracking transparency across legislative areas. Provides direct structural evidence of infrastructure development and budget spending optimizations.";
+                jsonBlock.textContent = JSON.stringify({
+                    "layer": "MP_Constituency_Strategic_Overview",
+                    "constituency_code": "MP-WEST-26",
+                    "gross_population_served": 482000,
+                    "budget_allocation_efficiency": "96.4%",
+                    "preventable_stockout_events_avoided": 142
+                }, null, 4);
+                tableTitle.textContent = "🏛️ Legislative Constituency High-Level Metrics";
+                tHeader.innerHTML = "<th>Constituency Regional Block</th><th>Active Medical Network Coverage</th><th>Resource Depletion Risk Average</th><th>Budget Output Optimization</th>";
+                tBody.innerHTML = "<tr><td>Indore Rural West</td><td>14 Functional PHCs</td><td>Minimal (2.1%)</td><td style='color: var(--accent-green); font-weight:600;'>94.2% Audit Clean Rate</td></tr>";
+            }
         }
     </script>
 </body>
