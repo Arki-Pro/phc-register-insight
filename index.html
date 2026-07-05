@@ -24,11 +24,12 @@
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
+        /* FIXED: Viewport height clamped to force child container scrolling */
         body {
             background-color: var(--bg-main);
             color: var(--text-light);
             display: flex;
-            min-height: 100vh;
+            height: 100vh;
             overflow: hidden;
         }
 
@@ -41,6 +42,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            height: 100%;
         }
 
         .track-badge {
@@ -73,11 +75,12 @@
             color: var(--text-light);
         }
 
-        /* Central Workspace */
+        /* FIXED: Standalone scrolling workspace view enabled */
         .workspace {
             flex: 1;
             padding: 2rem;
             overflow-y: auto;
+            height: 100%;
         }
 
         .grid {
@@ -85,6 +88,7 @@
             grid-template-columns: 1fr 1fr;
             gap: 1.5rem;
             margin-top: 1.5rem;
+            padding-bottom: 3rem;
         }
 
         .card {
@@ -236,7 +240,7 @@
             <div class="dev-explainer-box" id="architectureScopeGuidance">
                 <span style="color: var(--accent-blue); font-weight: bold;">⚙️ Architecture Node: Ground Staff Data Capture Configuration</span>
                 <p style="color: var(--text-dim); margin-top: 4px; line-height: 1.4;" id="scopeExplainerText">
-                    <b>MVP Operations:</b> This interface parses image streams directly into structural matrices. Use the selector above during the recording phase to explicitly demonstrate scalability to secondary administration cadres.
+                    <b>Rules Match:</b> Minimal data entry workload pattern. The phone image payload directly scales standard JSON parameters to prompt actionable structural trends without workflow displacement.
                 </p>
             </div>
 
