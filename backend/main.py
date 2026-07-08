@@ -32,5 +32,5 @@ response = client.models.generate_content(
     )
 )
 
-# 4. Print the clean output payload
+
 print(response.text)
