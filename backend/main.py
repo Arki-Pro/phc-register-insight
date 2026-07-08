@@ -1,14 +1,14 @@
+import os
 import base64
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from google import genai
 from google.genai import types
+import uvicorn
 
-# Initialize App & Gemini Client
 app = FastAPI()
-client = genai.Client()
 
-# CORS for Frontend access
+# CORS configuration: Allow all origins so frontend connects smoothly
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -16,15 +16,20 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Initialize Gemini Client - Render will inject GOOGLE_API_KEY from Settings
+# Ensure you have added GOOGLE_API_KEY in Render Environment variables
+client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+
 @app.post("/api/digitalize-register")
 async def digitalize(file: UploadFile = File(...)):
-    # Read file content from the upload
+    # 1. Read bytes from uploaded image
     image_bytes = await file.read()
     image_b64 = base64.b64encode(image_bytes).decode("utf-8")
 
-    # Gemini API Call
+    # 2. Call Gemini
+    # Ensure you are using the correct model version
     response = client.models.generate_content(
-        model="gemini-2.5-flash",
+        model="gemini-2.0-flash", 
         contents=[
             "Extract inventory data from this PHC register photo. Return ONLY a valid JSON object matching this schema: {'entries': [{'drug_name': '', 'quantity': '', 'date': ''}], 'confidence': 'high/medium/low'}",
             {
@@ -39,10 +44,9 @@ async def digitalize(file: UploadFile = File(...)):
         )
     )
     
-    # Return the text response directly
     return {"status": "success", "data": response.text}
 
 if __name__ == "__main__":
-    import uvicorn
-    # Host 0.0.0.0 is required for Codespaces port forwarding
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    # Render uses port 10000 by default, fallback to 8000
+    port = int(os.environ.get("PORT", 10000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
