@@ -52,7 +52,7 @@
             const btn = document.getElementById('processBtn');
             const output = document.getElementById('outputDisplay');
 
-            if (!fileInput.files[0]) {
+            if (!fileInput.files || !fileInput.files[0]) {
                 alert("Bhai, pehle photo toh select kar!");
                 return;
             }
@@ -73,12 +73,12 @@
                 if (!response.ok) throw new Error(`HTTP Error Status: ${response.status}`);
 
                 const data = await response.json();
-                output.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+                output.innerHTML = `<pre class="whitespace-pre-wrap">${JSON.stringify(data, null, 2)}</pre>`;
 
             } catch (error) {
                 console.error(error);
                 output.innerHTML = `<span class="text-red-400">Pipeline Error: ${error.message}</span>`;
-            } finaly {
+            } finally {
                 btn.disabled = false;
                 btn.innerText = "Extract Data via Gemini";
             }
