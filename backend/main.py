@@ -2,10 +2,10 @@ from google import genai
 from google.genai import types
 import base64
 
-# 1. Initialize the official new client
+
 client = genai.Client()
 
-# 2. Read the register image file safely
+
 try:
     with open("register_photo.jpg", "rb") as f:
         image_bytes = f.read()
@@ -14,8 +14,7 @@ except FileNotFoundError:
     print("Error: 'register_photo.jpg' file not found in this directory!")
     exit(1)
 
-# 3. Execute the standard multimodal generation call
-# Fixed: Changed 'input=' to 'contents=' and completed line 9 method
+
 response = client.models.generate_content(
     model="gemini-2.5-flash",
     contents=[
@@ -27,7 +26,7 @@ response = client.models.generate_content(
             }
         }
     ],
-    # Guardrail: Forces Gemini to output pure JSON without backtick syntax errors
+    
     config=types.GenerateContentConfig(
         response_mime_type="application/json"
     )
